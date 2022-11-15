@@ -2,6 +2,7 @@ import { useState } from 'react';
 import FormInput from '../form-input/form-input.component';
 import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth } from '../../utilities/firebase/firebase.utilities';
 import './sign-up-form.styles.scss';
+import { useNavigate } from 'react-router-dom';
 import Button from '../button/button.component';
 
 const defaultFormFields = {
@@ -15,6 +16,7 @@ const defaultFormFields = {
 const SignUpForm = () => {
     const [formFields, setFormFields] = useState(defaultFormFields);
     const { displayName, email, password, confirmPassword } = formFields;
+    const navigate = useNavigate();
 
     console.log(formFields)
 
@@ -33,6 +35,7 @@ const SignUpForm = () => {
         try {
             const { user} = await createAuthUserWithEmailAndPassword(email, password);
             await createUserDocumentFromAuth(user, { displayName })
+            navigate('/');
             resetFormFields();
         } catch(error){
             if(error.code === 'auth/email-already-in-use'){;
